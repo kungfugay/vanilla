@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Modal</title>
+    <style>
+        .modal {
+            position: fixed; /* 고정 위치 */
+            display: none;
+            justify-content: center;
+            align-items: center; /* 수직 중앙 정렬 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal_body {
+            width: 80vw;  /* 모달의 가로 크기 */
+            height: 40vh; /* 모달의 세로 크기 */
+            padding: 10%;
+            text-align: center;
+            background-color: hotpink; /* 모달창 배경색 */
+            border-radius: 10px; /* 테두리 */
+            box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15); /* 테두리 그림자 */
+            transform: scale(0); /* 모달이 열릴 때 크기를 0으로 설정 */
+            animation: bounceIn 0.5s forwards; /* 애니메이션 추가 */
+            margin: 10px; /* 모달 주변 여백 추가 */
+        }
+        
+        /* 튕기는 애니메이션 정의 */
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.1); /* 약간 커지게 */
+            }
+            100% {
+                transform: scale(1); /* 원래 크기로 돌아오기 */
+            }
+        }
+
+        .btn-modal {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px; /* 버튼 테두리 둥글게 */
+            cursor: pointer; /* 포인터 커서 */
+        }
+        #close-btn {
+            background-color: #007BFF;
+            color: white;
+        }
+        #close-btn:hover {
+            background-color: #0056b3; /* 버튼 호버 효과 */
+        }
+        #submit-btn {
+            background-color: white; /* 흰색 버튼 */
+            color: black; /* 글자 색상 */
+        }
+        #submit-btn:hover {
+            background-color: #f0f0f0; /* 호버 시 배경 색상 */
+        }
+        
+        /* 반응형 입력 필드 스타일 */
+        #password {
+            width: 20vw; /* 입력 필드 너비 */
+            padding: 10px; /* 패딩 추가 */
+            margin-top: 10px; /* 위쪽 마진 추가 */
+            border: 1px solid #ccc; /* 테두리 */
+            border-radius: 5px; /* 둥글게 */
+            font-size: 16px; /* 폰트 크기 */
+        }
+
+        @media (max-width: 600px) {
+            #password {
+                width: 90%; /* 작은 화면에서는 너비를 90%로 조정 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <div class="modal_body">
+            <h2>🙀 Did you invited??</h2>
+            <input type="text" id="password" placeholder="Enter password"><br>
+            <button id="submit-btn" class="btn-modal">Bitch I'm here</button>
+            <button id="close-btn" class="btn-modal">Sorry, I'll out now</button>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const accessModal = {
+            init: function() {
+                this.bindEvents();
+                this.checkCookie();
+            },
+            bindEvents: function() {
+                const $modal = $('.modal');
+                const $submitBtn = $('#submit-btn');
+                const $passwordInput = $('#password');
+                const $closeBtn = $('#close-btn');
+                
+                /*
+                // 모달 열기 버튼 클릭 시
+                $('.btn-open-modal').on('click', () => {
+                    $modal.css('display', 'flex'); // 모달 창 열기
+                    $modal.find('.modal_body').css('animation', 'bounceIn 0.5s forwards'); // 애니메이션 재설정
+                });
+                */
+
+                // 닫기 버튼 클릭 시 브라우저 뒤로가기
+                $closeBtn.on('click', () => {
+                    window.history.back(); // 브라우저 뒤로 가기
+                });
+
+                // 모달 배경 클릭 시 닫기
+                $modal.on('click', (event) => {
+                    if ($(event.target).is($modal)) {
+                        $modal.css('display', 'none'); // 모달 창 닫기
+                    }
+                });
+
+                // 제출 버튼 클릭 시
+                $submitBtn.on('click', () => {
+                    const inputValue = $passwordInput.val(); // 사용자 입력값 가져오기
+                    if (inputValue === '공주') {
+                        const cookieValue = this.generateUniqueCookieValue(); // 고유값 생성
+                        this.setCookie('accessKey', cookieValue, 1); // 쿠키 설정 (24시간 유효)
+                        alert('Welcome!'); // 알림
+                        $modal.css('display', 'none'); // 모달 닫기
+                    } else {
+                        alert('Haha, Cheater'); // 알림
+                    }
+                });
+            },
+            checkCookie: function() {
+                const cookies = document.cookie.split('; ');
+                if (!cookies.some(cookie => cookie.startsWith('accessKey='))) {
+                    $('.modal').css('display', 'flex'); // 모달 창 열기
+                } else if (cookies.some(cookie => cookie.startsWith('accessKey='))) {
+                    //location.reload();
+                    location.href = "index.html";
+                } else {
+                    alert('비정상적인 접근');
+                    window.history.back()
+                    
+                }
+            },
+            setCookie: function(name, value, days) {
+                const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+                document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+            },
+            generateUniqueCookieValue: function() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                    const r = Math.random() * 16 | 0;
+                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+        };
+
+        $(document).ready(function() {
+            accessModal.init(); // 초기화 함수 호출
+        });
+    </script>
+</body>
+</html>

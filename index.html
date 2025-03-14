@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>il dormiglione</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale:1, maximum-scale:1, user-scalable-no">
+    <!--웹브라우저 favicon-->
+    <link rel="icon" href="static/img/sleeping-face.svg" type="image/svg+xml">
+    <!--jQuery Library-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const index = {
+            init: function() {
+                this.loadCam();
+                this.loadGame();
+                this.loadGallery();
+                this.loadCredit();
+                this.refresh();
+            },
+            refresh: ()=>{
+                $("#header-img").click(function() {
+                    location.reload(); // 페이지를 리로드
+                });
+            },
+            loadCam: function() {
+                $("#btn-menu2").click(() => {
+                    this.removeNav();
+                    $(".main").load("camera.html?v=" + new Date().getTime(), (response, status, xhr) => {
+                        if (status === "error") {
+                            console.error("Error loading camera.html:", xhr.status, xhr.statusText);
+                            $(".main").html("Error loading page: " + xhr.status + " " + xhr.statusText);
+                        }
+                    });
+                });
+            },
+            loadGame: function() {
+                $("#btn-menu1").click(() => {
+                    alert('준비중이에욤!!');
+                });
+            },
+            loadGallery: function() {
+                $("#btn-menu3").click(() => {
+                    alert('준비중이에욤!!');
+                });
+            },
+            loadCredit: function() {
+                $("#btn-menu4").click(() => {
+                    alert('준비중이에욤!!');
+                });
+            },
+            removeNav: function() {
+                $(".nav").slideToggle(300, () => {
+                    $(".main").css("height", "85vh");
+                });
+            }
+        };
+
+        $(function() {
+            index.init(); // 초기화 메서드 호출
+        });
+    </script>
+    
+    <!--Access Modal-->
+    <script src="common.js"></script>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/modalstyle.css"> 
+</head>
+<body>
+<div class="container">
+<div class="header">
+    <img src="static/img/full-title.svg" class="header" id="header-img" alt="">
+</div>
+<div class="main">
+    
+<div class="main-content">
+2025 화이트데이 기념
+
+아기천사공주를 위한 컨텐츠 공간~
+</div>
+    
+</div>
+<div class="nav">
+    <div class="nav nav-item" id="btn-menu1"><p>Game</p></div>
+    <div class="nav nav-item" id="btn-menu2"><p>Camera</p></div>
+    <div class="nav nav-item" id="btn-menu3"><p>Gallery</p></div>
+    <div class="nav nav-item" id="btn-menu4"><p>Credit</p></div>
+</div>
+<div class="footer"><div style="font-family: 'Doto'">ⓒ 2025. Kungfugay All rights reserved.</div></div>
+</div>
+<div class="modal">
+    <div class="modal_body">
+        <h2>🙀 Did you invited??</h2>
+        <input type="text" id="password" placeholder="Enter password"><br>
+        <button id="submit-btn" class="btn-modal">Bitch I'm here</button>
+        <button id="close-btn" class="btn-modal">Sorry, I'll out now</button>
+    </div>
+</div>
+</body>
+</html>
